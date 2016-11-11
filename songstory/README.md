@@ -1,0 +1,4 @@
+- [Tracery tutorial](http://air.decontextualize.com/tracery/)
+- [another tutorial](http://www.crystalcodepalace.com/traceryTut.html) - includes "memory"
+- [original Tracery](https://github.com/galaxykate/tracery)
+- [node Tracery](https://github.com/v21/tracery)

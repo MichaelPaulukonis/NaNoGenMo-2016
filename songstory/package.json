@@ -1,0 +1,14 @@
+{
+  "name": "songstory",
+  "version": "0.0.1",
+  "description": "did you ever hear the story about the princess who made friends with a real live dishwasher?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Paulukonis",
+  "license": "MIT",
+  "dependencies": {
+    "tracery-grammar": "2.7.2"
+  }
+}

@@ -5,7 +5,12 @@
   "main": "index.js",
   "dependencies": {
     "iconv-lite": "0.4.13",
-    "nlp_compromise": "6.1.4"
+    "nlp_compromise": "6.1.4",
+    "retext": "4.0.0",
+    "retext-english": "2.0.0",
+    "retext-stringify": "1.0.0",
+    "unified": "5.1.0",
+    "unist-util-inspect": "4.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
