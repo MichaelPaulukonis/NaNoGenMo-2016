@@ -1,0 +1,3 @@
+- [Tracery tutorial](http://air.decontextualize.com/tracery/)
+- [original Tracery](https://github.com/galaxykate/tracery)
+- [node Tracery](https://github.com/v21/tracery)
