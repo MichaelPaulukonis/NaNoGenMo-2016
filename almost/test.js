@@ -53,7 +53,7 @@ text.children.filter((child) =>
        child.children.filter((child) => child.type == 'SentenceNode')
        .map((s) => console.log(retext().stringify(s))));
 
-// fs.writeFileSync('nclst2.txt', JSON.stringify(text, null, 2));
+fs.writeFileSync('nclst2.txt', JSON.stringify(text, null, 2));
 
 return;
 
