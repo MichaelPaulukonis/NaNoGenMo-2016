@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 var retext = require('retext');
 var nlcstToString = require('nlcst-to-string');
@@ -12,7 +12,8 @@ let textutils = require(`./textutil.js`),
     Corpora = require(`./corpora.js`),
     // corpora = new Corpora().filter('corpus|prejudice'),
     // corpora = new Corpora().filter('finnegan|prejudice'),
-    corpora = new Corpora().filter('moby|pride'),
+    // corpora = new Corpora().filter('moby|pride'),
+    corpora = new Corpora().filter('moby|reduce'),
     leven = require('leven'),
     timer = require('simple-timer');
 
@@ -58,25 +59,23 @@ function* treeSentences(cst) {
 // TODO: ideally, we want to _reconstruct_ the text, with all whitespaces from paras and between sentences
 function* treeClosests(cst, limit, sentenceHandler, wsHandler) {
   let i = 0;
-  // if (sentenceHandler === undefined) sentenceHandler =
+  if (sentenceHandler === undefined) {
+    sentenceHandler = function(sentNode) {
+      return ((sentNode.closest) ? sentNode.closest.sentence : retext().stringify(sentNode));
+    };
+  }
   for(let paraOrWhite of cst.children) {
     if (paraOrWhite.type === 'ParagraphNode') {
       for(let sentOrWhite of paraOrWhite.children) {
         if (sentOrWhite.type === 'SentenceNode') {
-          i++;
-          if (i >= limit && limit !== NO_LIMIT) break;
-          // console.log(`${i}: ${sentOrWhite.closest.sentence}`);
-          if (sentOrWhite.closest) yield sentOrWhite.closest.sentence;
-        } else if (sentOrWhite.type === 'WhiteSpaceNode') {
-          // console.log(`${i} sentence whitespace`);
-          yield retext().stringify(sentOrWhite);
+          if (++i >= limit && limit !== NO_LIMIT) break;
+          yield sentOrWhite.closest.sentence;
         } else {
-          console.log(`UNHANDLED NODE: ${sentOrWhite.type}:${JSON.stringify(sentOrWhite)}`);
+          yield retext().stringify(sentOrWhite);
         }
       }
-    } else if (paraOrWhite.type === 'WhiteSpaceNode') {
-      let text = retext().stringify(paraOrWhite);
-      yield text + '\n';
+    } else {
+      yield retext().stringify(paraOrWhite) + '\n';
     }
     if (i >= limit && limit !== NO_LIMIT) { break;}
   }
@@ -111,8 +110,8 @@ for(let s of iter) {
   let origSent = retext().stringify(s),
       closest = closestSent(closeText, origSent);
   s.closest = closest;
-  if ((ticker++)%50 === 0) {
-    console.log(`${ticker}: closerify took: ${timer.get('closerify').delta}\norig: ${origSent}\nclosest: ${JSON.stringify(closest,null,2)}`);
+  if ((ticker++)%10 === 0) {
+    console.log(`${ticker}: closerify took: ${timer.get('closerify').start}\norig: ${origSent}\nclosest: ${JSON.stringify(closest,null,2)}`);
   }
 }
 
@@ -121,14 +120,13 @@ console.log(`closerify took: ${timer.get('closerify').delta} to map ${sentenceLi
 
 // fs.writeFileSync('dump.txt', JSON.stringify(sourceText, null, 2));
 
-// TODO: this is "working" except for paragraph breaks. Hunh.
 let iter2 = treeClosests(sourceText, sentenceLimit),
     blob = [],
     stream = fs.createWriteStream('almost.txt');
 ticker = 0;
 
 for(let s of iter2) {
-  // console.log(`adding '${s}'`);
+  console.log(`adding '${s}'`);
   // blob.push(s);
   stream.write(s);
   // ticker++;
